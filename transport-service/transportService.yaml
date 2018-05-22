@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: transportservice-v1
+  labels:
+    app: transport-service-v1
+spec:
+  ports:
+  - port: 9999
+    name: http
+  selector:
+    app: transport-service-v1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transportservice-v2
+  labels:
+    app: transport-service-v2
+spec:
+  ports:
+  - port: 9999
+    name: http
+  selector:
+    app: transport-service-v2
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: transport-service-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: transport-service-v1
+        version: v1
+    spec:
+      containers:
+      - name: transport-service
+        image: vkahawala/transport-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9999
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: transport-service-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: transport-service-v2
+        version: v2
+    spec:
+      containers:
+      - name: transport-service
+        image: vkahawala/transport-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9999
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway
+  annotations:
+    kubernetes.io/ingress.class: "istio"
+spec:
+#  tls:
+#    - secretName: istio-ingress-certs # currently ignored
+  rules:
+  - http:
+      paths:
+      - path: /bus_time/v1/.*
+        backend:
+          serviceName: transportservice-v1
+          servicePort: 9999
+      - path: /bus_time/v2/.*
+        backend:
+          serviceName: transportservice-v2
+          servicePort: 9999

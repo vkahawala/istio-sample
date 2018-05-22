@@ -1,0 +1,26 @@
+apiVersion: config.istio.io/v1alpha2
+kind: listchecker
+metadata:
+  name: whitelist
+spec:
+  overrides: ["transport-service-v1", "transport-service-v2"]
+  blacklist: false
+---
+apiVersion: config.istio.io/v1alpha2
+kind: listentry
+metadata:
+  name: appversion
+spec:
+  value: source.labels["app"]
+---
+apiVersion: config.istio.io/v1alpha2
+kind: rule
+metadata:
+  name: checkservice
+spec:
+  match: destination.labels["app"] == "bus-service"
+  actions:
+  - handler: whitelist.listchecker
+    instances:
+    - appversion.listentry
+

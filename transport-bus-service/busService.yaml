@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: busservice
+  labels:
+    app: bus-service
+spec:
+  ports:
+  - port: 9001
+    name: http
+  selector:
+    app: bus-service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bus-service-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bus-service
+        version: v1
+    spec:
+      containers:
+      - name: bus-service
+        image: vkahawala/bus-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9001
+        env:
+          - name: VERSION
+            value: "1"
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bus-service-v2
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bus-service
+        version: v2
+    spec:
+      containers:
+      - name: bus-service
+        image: vkahawala/bus-service:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9001
+        env:
+          - name: VERSION
+            value: "2"
+---
+###########################################################################
+# Ingress resource (gateway)
+##########################################################################
+#apiVersion: extensions/v1beta1
+#kind: Ingress
+#metadata:
+#  name: gateway-busservice
+#  annotations:
+#    kubernetes.io/ingress.class: "istio"
+#spec:
+#  backend:
+#    serviceName: busservice
+#    servicePort: 9001
