@@ -3,7 +3,7 @@ kind: listchecker
 metadata:
   name: whitelist
 spec:
-  overrides: ["transport-service-v1", "transport-service-v2"]
+  overrides: ["transport-service-v1"]
   blacklist: false
 ---
 apiVersion: config.istio.io/v1alpha2

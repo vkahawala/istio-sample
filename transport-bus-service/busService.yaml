@@ -26,7 +26,7 @@ spec:
       containers:
       - name: bus-service
         image: vkahawala/bus-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9001
         env:
@@ -48,7 +48,7 @@ spec:
       containers:
       - name: bus-service
         image: vkahawala/bus-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9001
         env:

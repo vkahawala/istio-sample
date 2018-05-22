@@ -26,7 +26,7 @@ spec:
       containers:
       - name: time-service
         image: vkahawala/time-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9000
         env:
@@ -48,7 +48,7 @@ spec:
       containers:
       - name: time-service
         image: vkahawala/time-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9000
         env:

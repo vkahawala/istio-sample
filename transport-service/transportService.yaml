@@ -39,7 +39,7 @@ spec:
       containers:
       - name: transport-service
         image: vkahawala/transport-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9999
 ---
@@ -58,7 +58,7 @@ spec:
       containers:
       - name: transport-service
         image: vkahawala/transport-service:latest
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9999
 ---
@@ -69,8 +69,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "istio"
 spec:
-#  tls:
-#    - secretName: istio-ingress-certs # currently ignored
+  tls:
+    - secretName: istio-ingress-certs # currently ignored
   rules:
   - http:
       paths:
